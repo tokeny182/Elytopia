@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Elytopia — Русская версия викторины</title>
+  <meta name="description" content="Elytopia — русская игровая платформа викторин, вдохновлённая Blooket. Играйте в реальном времени, создавайте комнаты, проходите режимы." />
+  <link rel="icon" href="favicon.ico" />
+  <style>
+    :root {
+      --bg: #0f1020;
+      --card: #17182b;
+      --accent: #7c5cff;
+      --accent-2: #25c2a0;
+      --text: #e8e8f2;
+      --muted: #9aa0b0;
+      --danger: #ff6b6b;
+      --warning: #ffb020;
+    }
+    * { box-sizing: border-box }
+    html, body { height: 100% }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 90% -10%, #212244 0%, transparent 60%),
+        radial-gradient(1200px 600px at -10% 110%, #1a1b36 0%, transparent 60%),
+        var(--bg);
+      min-height: 100%;
+    }
+    a { color: var(--accent) }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 0;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      user-select: none;
+    }
+    .brand-logo {
+      width: 40px; height: 40px;
+      border-radius: 12px;
+      background: conic-gradient(from 210deg, var(--accent), var(--accent-2), var(--accent));
+      box-shadow: 0 8px 30px rgba(124,92,255,.35);
+    }
+    .brand h1 {
+      font-size: 20px; margin: 0; letter-spacing: .5px;
+    }
+    nav {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center; justify-content: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      background: #232544;
+      color: var(--text);
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform .06s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
+    }
+    .btn:hover { transform: translateY(-1px) }
+    .btn:active { transform: translateY(0) scale(.99) }
+    .btn.primary {
+      background: linear-gradient(180deg, #8b6dff, #6d4cff);
+      box-shadow: 0 10px 28px rgba(124,92,255,.35);
+    }
+    .btn.ghost { background: transparent; border-color: #2a2c4f }
+    .btn.success {
+      background: linear-gradient(180deg, #35d7b3, #25c2a0);
+      box-shadow: 0 10px 28px rgba(53,215,179,.25);
+    }
+    .btn.warning {
+      background: linear-gradient(180deg, #ffcc66, #ffb020);
+      box-shadow: 0 10px 28px rgba(255,176,32,.25);
+    }
+    .btn.danger {
+      background: linear-gradient(180deg, #ff8f8f, #ff6b6b);
+      box-shadow: 0 10px 28px rgba(255,107,107,.28);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+    }
+    .card {
+      background: rgba(23,24,43,.85);
+      border: 1px solid #2a2c4f;
+      backdrop-filter: blur(8px);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    .card h2 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      letter-spacing: .4px;
+    }
+    .muted { color: var(--muted) }
+    .hero {
+      grid-column: span 12;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+    .hero-left {
+      padding: 24px;
+      display: flex; flex-direction: column; gap: 14px;
+      background:
+        radial-gradient(800px 320px at 75% -50%, rgba(124,92,255,.2), transparent 60%),
+        radial-gradient(600px 260px at -30% 140%, rgba(37,194,160,.18), transparent 60%),
+        rgba(23,24,43,.85);
+      border: 1px solid #2a2c4f;
+      border-radius: 16px;
+    }
+    .title {
+      font-size: 28px; font-weight: 700; margin: 0;
+    }
+    .subtitle { font-size: 15px; line-height: 1.5 }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px }
+    .hero-right { position: relative }
+    .stat {
+      display: grid; grid-template-columns: auto 1fr auto; gap: 10px;
+      align-items: center;
+      padding: 12px;
+      border-radius: 12px;
+      background: #1c1d35; border: 1px dashed #2a2c4f;
+    }
+    .pill {
+      font-size: 12px; padding: 6px 10px; border-radius: 999px;
+      border: 1px solid #2a2c4f; background: #1a1b31; color: var(--muted);
+    }
+    .form {
+      display: grid; gap: 10px; margin-top: 10px;
+    }
+    .input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid #2a2c4f;
+      background: #1a1b31;
+      color: var(--text);
+      outline: none;
+    }
+    .row { display: flex; gap: 10px; flex-wrap: wrap }
+    .mode-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    }
+    .mode { padding: 14px; border-radius: 14px; background: #1c1d35; border: 1px solid #2a2c4f }
+    .mode h3 { margin: 0 0 6px; font-size: 16px }
+    .mode p { margin: 0; font-size: 13px; color: var(--muted) }
+    footer {
+      margin-top: 24px; padding: 16px 0; color: var(--muted); font-size: 13px;
+      border-top: 1px solid #2a2c4f;
+    }
+    .hide { display: none !important }
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr }
+    }
+    @media (max-width: 700px) {
+      .mode-grid { grid-template-columns: repeat(2,1fr) }
+    }
+    @media (max-width: 460px) {
+      .mode-grid { grid-template-columns: 1fr }
+    }
+    /* Minimal quiz styles */
+    .quiz {
+      display: grid; gap: 14px;
+    }
+    .quiz .q {
+      font-weight: 600;
+      padding: 12px; border-radius: 12px; background: #1c1d35; border: 1px solid #2a2c4f;
+    }
+    .quiz .answers { display: grid; gap: 10px; grid-template-columns: repeat(2, 1fr) }
+    .answer {
+      padding: 10px 12px; border-radius: 12px; cursor: pointer;
+      border: 1px solid #2a2c4f; background: #1a1b31;
+    }
+    .answer.correct { border-color: #25c2a0; box-shadow: inset 0 0 0 2px #25c2a0 }
+    .answer.wrong { border-color: #ff6b6b; box-shadow: inset 0 0 0 2px #ff6b6b }
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      background: #1a1b31; border: 1px solid #2a2c4f; padding: 10px 14px; border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div aria-hidden="true" class="brand-logo"></div>
+        <h1>Elytopia</h1>
+        <span class="pill">бета</span>
+      </div>
+      <nav>
+        <button class="btn ghost" id="nav-home">Главная</button>
+        <button class="btn ghost" id="nav-modes">Режимы</button>
+        <button class="btn ghost" id="nav-host">Создать комнату</button>
+        <button class="btn ghost" id="nav-join">Присоединиться</button>
+        <button class="btn primary" id="nav-login">Войти</button>
+      </nav>
+    </header>
+
+    <main class="grid">
+      <!-- Hero -->
+      <section class="hero">
+        <div class="hero-left">
+          <h2 class="title">Русская платформа викторин для классов и друзей</h2>
+          <p class="subtitle">Создавайте комнаты, выбирайте игровые режимы и соревнуйтесь в реальном времени.
+            Elytopia — вдохновлённая Blooket, но сделанная для русскоязычных игроков.</p>
+          <div class="hero-actions">
+            <button class="btn success" id="cta-host">Создать комнату</button>
+            <button class="btn" id="cta-join">Присоединиться по коду</button>
+            <button class="btn warning" id="cta-modes">Посмотреть режимы</button>
+          </div>
+
+          <div class="stat" aria-live="polite">
+            <span class="pill">онлайн</span>
+            <div>
+              <div><strong>Игроки:</strong> <span id="stat-players">0</span></div>
+              <div class="muted" style="font-size: 12px">Локальная демонстрация. Для реального онлайна добавьте сервер позже.</div>
+            </div>
+            <span class="pill">комнаты: <span id="stat-rooms">0</span></span>
+          </div>
+        </div>
+        <div class="hero-right card">
+          <h2>Быстрый старт</h2>
+          <div class="form">
+            <label for="quick-name">Отобразить имя</label>
+            <input id="quick-name" class="input" placeholder="Например: Алина" />
+            <div class="row">
+              <button class="btn success" id="quick-create">Создать комнату</button>
+              <button class="btn" id="quick-join">Ввести код</button>
+            </div>
+            <small class="muted">Подсказка: код комнаты генерируется автоматически, вы можете поделиться им с друзьями.</small>
+          </div>
+        </div>
+      </section>
+
+      <!-- Modes -->
+      <section id="section-modes" class="card" style="grid-column: span 12; margin-top: 16px;">
+        <h2>Режимы игры</h2>
+        <p class="muted">Выберите стиль игры. Режимы можно менять перед стартом раунда.</p>
+        <div class="mode-grid">
+          <div class="mode">
+            <h3>Классика</h3>
+            <p>Обычная викторина с таймером и подсчётом очков.</p>
+            <div class="row" style="margin-top:8px">
+              <button class="btn" data-select-mode="classic">Выбрать</button>
+              <span class="pill">таймер</span>
+            </div>
+          </div>
+          <div class="mode">
+            <h3>Блиц</h3>
+            <p>Короткие раунды, высокие ставки — быстро и интенсивно.</p>
+            <div class="row" style="margin-top:8px">
+              <button class="btn" data-select-mode="blitz">Выбрать</button>
+              <span class="pill">скорость</span>
+            </div>
+          </div>
+          <div class="mode">
+            <h3>Команды</h3>
+            <p>Игроки делятся на команды, очки суммируются.</p>
+            <div class="row" style="margin-top:8px">
+              <button class="btn" data-select-mode="teams">Выбрать</button>
+              <span class="pill">кооперация</span>
+            </div>
+          </div>
+          <div class="mode">
+            <h3>Выживание</h3>
+            <p>Ошибся — выбываешь. Побеждает последний оставшийся.</p>
+            <div class="row" style="margin-top:8px">
+              <button class="btn" data-select-mode="survival">Выбрать</button>
+              <span class="pill">хардкор</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Host room -->
+      <section id="section-host" class="card hide" style="grid-column: span 7;">
+        <h2>Создать комнату</h2>
+        <div class="form">
+          <label for="host-display-name">Ваше имя</label>
+          <input id="host-display-name" class="input" placeholder="Введите имя" />
+          <label for="host-title">Название комнаты</label>
+          <input id="host-title" class="input" placeholder="Например: История 7Б" />
+          <label for="host-mode">Режим</label>
+          <select id="host-mode" class="input">
+            <option value="classic">Классика</option>
+            <option value="blitz">Блиц</option>
+            <option value="teams">Команды</option>
+            <option value="survival">Выживание</option>
+          </select>
+          <div class="row">
+            <button class="btn success" id="host-create">Создать</button>
+            <button class="btn ghost" id="host-cancel">Отмена</button>
+          </div>
+          <small class="muted">Комната сохраняется в LocalStorage. В продакшене замените на API.</small>
+        </div>
+      </section>
+
+      <!-- Join room -->
+      <section id="section-join" class="card hide" style="grid-column: span 5;">
+        <h2>Присоединиться</h2>
+        <div class="form">
+          <label for="join-name">Ваше имя</label>
+          <input id="join-name" class="input" placeholder="Введите имя" />
+          <label for="join-code">Код комнаты</label>
+          <input id="join-code" class="input" placeholder="Например: 8F3K-21" />
+          <div class="row">
+            <button class="btn" id="join-go">Присоединиться</button>
+            <button class="btn ghost" id="join-cancel">Отмена</button>
+          </div>
+          <small class="muted">Код комнаты выглядит как XXXX-YY. Поделитесь кодом с игроками.</small>
+        </div>
+      </section>
+
+      <!-- Lobby -->
+      <section id="section-lobby" class="card hide" style="grid-column: span 12;">
+        <h2>Лобби</h2>
+        <div class="row" style="justify-content: space-between; align-items: center;">
+          <div>
+            <strong>Комната:</strong> <span id="lobby-title">—</span>
+            <span class="pill" id="lobby-code">—</span>
+          </div>
+          <div class="row">
+            <span class="pill" id="lobby-mode">режим: классика</span>
+            <button class="btn warning" id="lobby-start">Начать раунд</button>
+            <button class="btn danger" id="lobby-leave">Выйти</button>
+          </div>
+        </div>
+        <div style="margin-top: 12px">
+          <strong>Игроки:</strong>
+          <div id="lobby-players" class="row" style="margin-top:8px"></div>
+        </div>
+      </section>
+
+      <!-- Quiz (demo) -->
+      <section id="section-quiz" class="card hide" style="grid-column: span 12;">
+        <h2>Раунд викторины</h2>
+        <div class="quiz">
+          <div class="row" style="justify-content: space-between; align-items: center;">
+            <div><strong>Вопрос:</strong> <span id="quiz-index">1</span>/<span id="quiz-total">3</span></div>
+            <div class="pill"><span id="quiz-timer">20</span> сек</div>
+          </div>
+          <div class="q" id="quiz-question">Столица России?</div>
+          <div class="answers" id="quiz-answers"></div>
+          <div class="row" style="justify-content:flex-end">
+            <button class="btn" id="quiz-next">Следующий</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="row" style="justify-content: space-between">
+        <div>© Elytopia. Сделано для обучения и развлечения.</div>
+        <div class="muted">Статическая демо-версия. Разверните на GitHub Pages.</div>
+      </div>
+    </footer>
+  </div>
+
+  <div id="toast" class="toast hide" role="status" aria-live="polite"></div>
+
+  <script>
+    // --- Utilities ---
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+    const toast = (msg, ms = 2000) => {
+      const el = $("#toast");
+      el.textContent = msg;
+      el.classList.remove("hide");
+      clearTimeout(el._t);
+      el._t = setTimeout(() => el.classList.add("hide"), ms);
+    };
+    const randCode = () => {
+      const part = () => Math.random().toString(36).toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,4);
+      return part() + "-" + Math.random().toString(10).slice(2,4);
+    };
+    const storage = {
+      getRooms() { return JSON.parse(localStorage.getItem("ely_rooms")||"[]"); },
+      setRooms(r) { localStorage.setItem("ely_rooms", JSON.stringify(r)); },
+      incPlayers(n=1) {
+        const v = Number(localStorage.getItem("ely_players")||"0")+n;
+        localStorage.setItem("ely_players", String(v));
+      },
+      getPlayers() { return Number(localStorage.getItem("ely_players")||"0"); }
+    };
+
+    // --- State ---
+    const state = {
+      currentView: "home",
+      me: { name: "", roomCode: null, host: false },
+      room: null,
+      mode: "classic",
+      quiz: {
+        index: 0,
+        timer: 20,
+        data: [
+          { q: "Столица России?", a: ["Москва","Санкт-Петербург","Казань","Новосибирск"], correct: 0 },
+          { q: "Сколько континентов на Земле?", a: ["5","6","7","8"], correct: 2 },
+          { q: "Химический символ воды?", a: ["H2","HO","H2O","OH2"], correct: 2 }
+        ]
+      }
+    };
+
+    // --- Navigation ---
+    const show = (id) => $(id).classList.remove("hide");
+    const hide = (id) => $(id).classList.add("hide");
+    const go = (view) => {
+      state.currentView = view;
+      // hide all sections
+      ["#section-modes","#section-host","#section-join","#section-lobby","#section-quiz"].forEach(hide);
+      if (view === "home") {
+        // nothing extra
+      } else if (view === "modes") show("#section-modes");
+      else if (view === "host") show("#section-host");
+      else if (view === "join") show("#section-join");
+      else if (view === "lobby") {
+        renderLobby();
+        show("#section-lobby");
+      } else if (view === "quiz") {
+        renderQuiz();
+        show("#section-quiz");
+      }
+      updateStats();
+    };
+
+    // --- Stats ---
+    function updateStats() {
+      $("#stat-rooms").textContent = storage.getRooms().length;
+      $("#stat-players").textContent = storage.getPlayers();
+    }
+
+    // --- Modes select ---
+    $$("#section-modes [data-select-mode]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        state.mode = btn.getAttribute("data-select-mode");
+        toast("Режим выбран: " + state.mode);
+        $("#host-mode").value = state.mode;
+        $("#lobby-mode").textContent = "режим: " + state.mode;
+      });
+    });
+
+    // --- Hero CTA ---
+    $("#cta-host").onclick = () => go("host");
+    $("#cta-join").onclick = () => go("join");
+    $("#cta-modes").onclick = () => go("modes");
+
+    // --- Nav ---
+    $("#nav-home").onclick = () => go("home");
+    $("#nav-modes").onclick = () => go("modes");
+    $("#nav-host").onclick = () => go("host");
+    $("#nav-join").onclick = () => go("join");
+    $("#nav-login").onclick = () => toast("Авторизация будет добавлена позже.");
+
+    // --- Quick Start ---
+    $("#quick-create").onclick = () => {
+      const name = $("#quick-name").value.trim();
+      if (!name) return toast("Введите имя.");
+      $("#host-display-name").value = name;
+      $("#host-title").value = "Комната " + name;
+      go("host");
+    };
+    $("#quick-join").onclick = () => {
+      const name = $("#quick-name").value.trim();
+      if (!name) return toast("Введите имя.");
+      $("#join-name").value = name;
+      go("join");
+    };
+
+    // --- Host create ---
+    $("#host-create").onclick = () => {
+      const name = $("#host-display-name").value.trim();
+      const title = $("#host-title").value.trim() || "Без названия";
+      const mode = $("#host-mode").value;
+      if (!name) return toast("Введите имя ведущего.");
+      const code = randCode();
+      const room = { code, title, mode, host: name, players: [name], createdAt: Date.now() };
+      const rooms = storage.getRooms();
+      rooms.push(room);
+      storage.setRooms(rooms);
+      storage.incPlayers(1);
+      state.me = { name, roomCode: code, host: true };
+      state.room = room;
+      state.mode = mode;
+      toast("Комната создана: " + code);
+      go("lobby");
+    };
+    $("#host-cancel").onclick = () => go("home");
+
+    // --- Join room ---
+    $("#join-go").onclick = () => {
+      const name = $("#join-name").value.trim();
+      const code = $("#join-code").value.trim().toUpperCase();
+      if (!name || !code) return toast("Введите имя и код комнаты.");
+      const rooms = storage.getRooms();
+      const room = rooms.find(r => r.code === code);
+      if (!room) return toast("Комната не найдена.");
+      if (!room.players.includes(name)) {
+        room.players.push(name);
+        storage.setRooms(rooms);
+        storage.incPlayers(1);
+      }
+      state.me = { name, roomCode: code, host: false };
+      state.room = room;
+      state.mode = room.mode;
+      toast("Присоединились к комнате.");
+      go("lobby");
+    };
+    $("#join-cancel").onclick = () => go("home");
+
+    // --- Lobby ---
+    function renderLobby() {
+      const room = state.room || storage.getRooms().find(r => r.code === state.me.roomCode);
+      if (!room) { toast("Комната недоступна."); return go("home"); }
+      $("#lobby-title").textContent = room.title;
+      $("#lobby-code").textContent = room.code;
+      $("#lobby-mode").textContent = "режим: " + (state.mode || room.mode);
+      const list = $("#lobby-players");
+      list.innerHTML = "";
+      room.players.forEach(p => {
+        const tag = document.createElement("span");
+        tag.className = "pill";
+        tag.textContent = p;
+        list.appendChild(tag);
+      });
+    }
+    $("#lobby-start").onclick = () => {
+      if (!state.me.host) return toast("Только ведущий может начать раунд.");
+      state.quiz.index = 0;
+      state.quiz.timer = state.mode === "blitz" ? 10 : 20;
+      go("quiz");
+    };
+    $("#lobby-leave").onclick = () => {
+      const rooms = storage.getRooms();
+      const room = rooms.find(r => r.code === state.me.roomCode);
+      if (room) {
+        room.players = room.players.filter(p => p !== state.me.name);
+        storage.setRooms(rooms);
+      }
+      storage.incPlayers(-1);
+      state.me = { name: "", roomCode: null, host: false };
+      state.room = null;
+      toast("Вы вышли из комнаты.");
+      go("home");
+    };
+
+    // --- Quiz demo ---
+    function renderQuiz() {
+      const q = state.quiz.data[state.quiz.index];
+      $("#quiz-index").textContent = state.quiz.index + 1;
+      $("#quiz-total").textContent = state.quiz.data.length;
+      $("#quiz-question").textContent = q.q;
+      const container = $("#quiz-answers");
+      container.innerHTML = "";
+      q.a.forEach((text, i) => {
+        const btn = document.createElement("button");
+        btn.className = "answer";
+        btn.textContent = text;
+        btn.onclick = () => {
+          const correct = i === q.correct;
+          btn.classList.add(correct ? "correct" : "wrong");
+          toast(correct ? "Верно!" : "Неверно.");
+        };
+        container.appendChild(btn);
+      });
+      // Timer (client-side mock)
+      clearInterval(state._timer);
+      const base = state.mode === "blitz" ? 10 : 20;
+      let t = base;
+      $("#quiz-timer").textContent = t;
+      state._timer = setInterval(() => {
+        t -= 1;
+        $("#quiz-timer").textContent = t;
+        if (t <= 0) {
+          clearInterval(state._timer);
+          toast("Время вышло!");
+        }
+      }, 1000);
+    }
+    $("#quiz-next").onclick = () => {
+      if (state.quiz.index < state.quiz.data.length - 1) {
+        state.quiz.index += 1;
+        renderQuiz();
+      } else {
+        clearInterval(state._timer);
+        toast("Раунд завершён.");
+        go("lobby");
+      }
+    };
+
+    // --- Initial ---
+    updateStats();
+  </script>
+</body>
+</html>
