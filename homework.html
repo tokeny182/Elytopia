@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Homework — Elytopia (Russian version of Blooket)</title>
+  <style>
+    :root {
+      --bg: #0f1226;
+      --card: #1a1f3c;
+      --text: #e9ecff;
+      --muted: #b9c0ff;
+      --accent: #6aa6ff;
+      --accent-2: #9d6aff;
+      --good: #44d18d;
+      --warn: #ffd166;
+    }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(1200px circle at 10% 10%, #151946 0%, var(--bg) 40%), var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(185,192,255,0.18);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .logo {
+      width: 42px; height: 42px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 8px 24px rgba(106,166,255,0.35);
+    }
+    h1 { font-size: 1.6rem; margin: 0; letter-spacing: 0.2px; }
+    .subtitle { color: var(--muted); font-size: 0.95rem; }
+    .due {
+      margin: 18px 0 0;
+      padding: 10px 14px;
+      background: rgba(106,166,255,0.12);
+      border: 1px solid rgba(106,166,255,0.25);
+      border-radius: 10px;
+      display: inline-block;
+      font-weight: 600;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      margin-top: 24px;
+    }
+    @media (min-width: 760px) {
+      .grid { grid-template-columns: 1.4fr 1fr; }
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(185,192,255,0.14);
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 10px 32px rgba(20,24,54,0.35);
+    }
+    .card h2 { margin: 0 0 10px; font-size: 1.2rem; }
+    .list { list-style: none; padding: 0; margin: 0; }
+    .item {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: start;
+      gap: 12px;
+      padding: 12px 10px;
+      border-radius: 10px;
+      transition: background 0.2s ease;
+    }
+    .item:hover { background: rgba(185,192,255,0.08); }
+    .bullet {
+      width: 9px; height: 9px; margin-top: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(106,166,255,0.18) inset;
+    }
+    .title { font-weight: 600; }
+    .tag {
+      font-size: 0.78rem;
+      color: var(--bg);
+      background: var(--muted);
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+    .note { color: var(--muted); font-size: 0.92rem; margin-top: 8px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .footer { margin-top: 26px; color: var(--muted); font-size: 0.9rem; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+    .btn {
+      border: 1px solid rgba(185,192,255,0.22);
+      background: linear-gradient(180deg, rgba(185,192,255,0.12), rgba(185,192,255,0.06));
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn.primary {
+      border-color: rgba(106,166,255,0.45);
+      background: linear-gradient(180deg, rgba(106,166,255,0.22), rgba(106,166,255,0.12));
+    }
+    .status {
+      display: inline-flex; align-items: center; gap: 8px; margin-top: 8px;
+      font-size: 0.92rem;
+    }
+    .dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--good);
+      box-shadow: 0 0 0 4px rgba(68,209,141,0.18) inset;
+    }
+    .warn { background: var(--warn); box-shadow: 0 0 0 4px rgba(255,209,102,0.18) inset; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Homework — Elytopia</h1>
+          <div class="subtitle">The Russian version of Blooket — Week 1 tasks and resources</div>
+        </div>
+      </div>
+      <div class="due">Due Friday 5 PM</div>
+    </header>
+
+    <div class="grid">
+      <section class="card">
+        <h2>Assignments</h2>
+        <ul class="list">
+          <li class="item">
+            <span class="bullet" aria-hidden="true"></span>
+            <div>
+              <div class="title">Read introduction to Elytopia</div>
+              <div class="note">Understand how Elytopia adapts Blooket for Russian players — packs, бло́ки (blooks), and event flow. Write three key takeaways.</div>
+            </div>
+            <span class="tag">Reading</span>
+          </li>
+          <li class="item">
+            <span class="bullet" aria-hidden="true"></span>
+            <div>
+              <div class="title">Watch the channel trailer</div>
+              <div class="note">Identify how the trailer communicates Elytopia as the Russian version of Blooket. Suggest one improvement to the opening hook.</div>
+            </div>
+            <span class="tag">Video</span>
+          </li>
+          <li class="item">
+            <span class="bullet" aria-hidden="true"></span>
+            <div>
+              <div class="title">Write a one‑take script</div>
+              <div class="note">Draft a 60‑second script introducing Elytopia as the Russian version of Blooket. Keep it plain text with no symbols or hashtags.</div>
+            </div>
+            <span class="tag">Writing</span>
+          </li>
+          <li class="item">
+            <span class="bullet" aria-hidden="true"></span>
+            <div>
+              <div class="title">Post a teaser reply</div>
+              <div class="note">Reply under your trailer tweet with a clean teaser line. Example: Next up rare pack openings and surprises inside Elytopia</div>
+            </div>
+            <span class="tag">Social</span>
+          </li>
+          <li class="item">
+            <span class="bullet" aria-hidden="true"></span>
+            <div>
+              <div class="title">Local flavor brainstorm</div>
+              <div class="note">List 5 Russian‑specific event ideas or themes (New Year, Maslenitsa, school seasons) that fit Elytopia’s style.</div>
+            </div>
+            <span class="tag">Creative</span>
+          </li>
+        </ul>
+
+        <div class="actions">
+          <button class="btn primary" onclick="alert('Submit via the form below')">Submit</button>
+          <button class="btn" onclick="alert('Saved locally')">Save progress</button>
+        </div>
+        <div class="status"><span class="dot" aria-hidden="true"></span> On track</div>
+      </section>
+
+      <aside class="card">
+        <h2>Resources</h2>
+        <ul class="list">
+          <li class="item">
+            <span class="bullet" aria-hidden="true"></span>
+            <div>
+              <div class="title">Trailer link</div>
+              <div class="note"><a href="#" aria-label="Trailer link">Paste your YouTube trailer link here</a></div>
+            </div>
+            <span class="tag">Link</span>
+          </li>
+          <li class="item">
+            <span class="bullet" aria-hidden="true"></span>
+            <div>
+              <div class="title">Brand guidelines</div>
+              <div class="note">State clearly Elytopia is the Russian version of Blooket. Use plain text posts with no symbols or hashtags when needed.</div>
+            </div>
+            <span class="tag">Notes</span>
+          </li>
+          <li class="item">
+            <span class="bullet" aria-hidden="true"></span>
+            <div>
+              <div class="title">Script starter</div>
+              <div class="note">Welcome to Elytopia the Russian version of Blooket Packs blooks events and the Class Pass await Watch our trailer now</div>
+            </div>
+            <span class="tag">Template</span>
+          </li>
+          <li class="item">
+            <span class="bullet" aria-hidden="true"></span>
+            <div>
+              <div class="title">Localization tips</div>
+              <div class="note">Consider bilingual terms where helpful for clarity, e.g., blooks — блоки. Keep tone friendly and direct.</div>
+            </div>
+            <span class="tag">Guide</span>
+          </li>
+        </ul>
+
+        <h2 style="margin-top:16px;">Submission</h2>
+        <form onsubmit="event.preventDefault(); alert('Homework submitted');">
+          <label for="link">Submission link</label><br />
+          <input id="link" name="link" type="url" placeholder="Paste your post or video URL" style="width:100%; margin:8px 0; padding:10px; border-radius:8px; border:1px solid rgba(185,192,255,0.25); background:#121630; color:var(--text);" />
+          <label for="notes">Notes</label><br />
+          <textarea id="notes" name="notes" rows="4" placeholder="Optional notes or reflections" style="width:100%; margin:8px 0; padding:10px; border-radius:8px; border:1px solid rgba(185,192,255,0.25); background:#121630; color:var(--text);"></textarea>
+          <button class="btn primary" type="submit">Submit homework</button>
+        </form>
+      </aside>
+    </div>
+
+    <div class="footer">
+      Need help Use the trailer description and tweet templates above or write in plain text with no symbols to keep branding consistent
+    </div>
+  </div>
+</body>
+</html>
