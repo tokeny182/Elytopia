@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Elytopia — История</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div aria-hidden="true" class="brand-logo"></div>
+        <h1>Elytopia</h1>
+      </div>
+      <nav>
+        <a href="index.html" class="btn ghost">Главная</a>
+        <a href="market.html" class="btn ghost">Магазин</a>
+        <a href="blooks.html" class="btn ghost">Блуки</a>
+        <a href="login.html" class="btn ghost">Вход</a>
+        <a href="signup.html" class="btn ghost">Регистрация</a>
+      </nav>
+    </header>
+
+    <main class="grid">
+      <section class="card" style="grid-column: span 12;">
+        <h2>История открытий</h2>
+        <p class="muted">Здесь отображаются все ваши последние открытия паков.</p>
+        <ul id="history-list" class="muted"></ul>
+      </section>
+    </main>
+
+    <footer>
+      <div>© Elytopia</div>
+    </footer>
+  </div>
+
+  <script>
+    // Load history from localStorage
+    const historyList = document.getElementById("history-list");
+    const history = JSON.parse(localStorage.getItem("ely_history") || "[]");
+
+    if (history.length === 0) {
+      historyList.innerHTML = "<li>История пуста.</li>";
+    } else {
+      history.forEach(entry => {
+        const li = document.createElement("li");
+        li.innerHTML = `<span style="color:${entry.color}; font-weight:bold">${entry.rarity}</span> — ${new Date(entry.time).toLocaleString()}`;
+        historyList.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>
