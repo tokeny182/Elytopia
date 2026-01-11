@@ -21,6 +21,7 @@
     </header>
 
     <main class="grid">
+      <!-- Currency display -->
       <section class="card" style="grid-column: span 12;">
         <h2>Магазин паков</h2>
         <p class="muted">Вы получаете <strong>25 монет</strong> каждые 2 секунды. Каждый пак стоит 25 монет.</p>
@@ -30,13 +31,17 @@
         </div>
       </section>
 
+      <!-- Packs grid -->
       <section class="card" style="grid-column: span 12;">
         <div class="mode-grid" id="packs"></div>
       </section>
 
+      <!-- Result + history -->
       <section class="card" style="grid-column: span 12;">
         <h2>Результат открытия</h2>
         <div id="result" class="muted">Пока ничего не открыто.</div>
+        <h3 style="margin-top:16px;">История открытий</h3>
+        <ul id="history" class="muted"></ul>
       </section>
     </main>
 
@@ -57,11 +62,14 @@
     document.getElementById("reset").onclick = () => {
       coins = 0;
       currencyEl.textContent = coins;
+      document.getElementById("history").innerHTML = "";
+      document.getElementById("result").textContent = "Баланс сброшен.";
     };
 
     // --- Packs ---
     const packsContainer = document.getElementById("packs");
     const resultEl = document.getElementById("result");
+    const historyEl = document.getElementById("history");
 
     const packs = Array.from({length: 13}, (_, i) => ({
       id: i+1,
@@ -79,15 +87,15 @@
       packsContainer.appendChild(div);
     });
 
-    // --- Rarity system ---
+    // --- Rarity system with exact chances ---
     const rarities = [
-      { name: "Uncommon", chance: 40, color: "#4caf50" },
-      { name: "Rare", chance: 25, color: "#2196f3" },
-      { name: "Epic", chance: 15, color: "#9c27b0" },
-      { name: "Legendary", chance: 10, color: "#ff9800" },
-      { name: "Chroma", chance: 5, color: "#e91e63" },
-      { name: "Supreme", chance: 3, color: "#00bcd4" },
-      { name: "Mythical", chance: 2, color: "#f44336" }
+      { name: "Uncommon", chance: 19, color: "#4caf50" },
+      { name: "Rare", chance: 7, color: "#2196f3" },
+      { name: "Epic", chance: 5, color: "#9c27b0" },
+      { name: "Legendary", chance: 0.3, color: "#ff9800" },
+      { name: "Chroma", chance: 0.05, color: "#e91e63" },
+      { name: "Supreme", chance: 0.04, color: "#00bcd4" },
+      { name: "Mythical", chance: 0.01, color: "#f44336" }
     ];
 
     function rollRarity() {
@@ -100,6 +108,7 @@
       return rarities[0]; // fallback
     }
 
+    // --- Pack opening ---
     packsContainer.addEventListener("click", e => {
       if (e.target.matches("[data-pack]")) {
         if (coins < 25) {
@@ -111,6 +120,9 @@
         const rarity = rollRarity();
         resultEl.innerHTML = `Вы открыли пак и получили: 
           <span style="color:${rarity.color}; font-weight:bold">${rarity.name}</span>`;
+        const li = document.createElement("li");
+        li.innerHTML = `<span style="color:${rarity.color}; font-weight:bold">${rarity.name}</span>`;
+        historyEl.appendChild(li);
       }
     });
   </script>
