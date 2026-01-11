@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Elytopia — Настройки</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div aria-hidden="true" class="brand-logo"></div>
+        <h1>Elytopia</h1>
+      </div>
+      <nav>
+        <a href="index.html" class="btn ghost">Главная</a>
+        <a href="market.html" class="btn ghost">Магазин</a>
+        <a href="blooks.html" class="btn ghost">Блуки</a>
+        <a href="history.html" class="btn ghost">История</a>
+      </nav>
+    </header>
+
+    <main class="grid">
+      <section class="card" style="grid-column: span 12;">
+        <h2>Настройки</h2>
+        <p class="muted">Измените параметры игры и интерфейса Elytopia.</p>
+
+        <form class="form" id="settings-form">
+          <!-- Theme -->
+          <label for="theme">Тема оформления</label>
+          <select id="theme" class="input">
+            <option value="dark">Тёмная</option>
+            <option value="light">Светлая</option>
+          </select>
+
+          <!-- Sound -->
+          <label>
+            <input type="checkbox" id="sound" />
+            Включить звуки
+          </label>
+
+          <!-- Notifications -->
+          <label>
+            <input type="checkbox" id="notifications" />
+            Уведомления о новых событиях
+          </label>
+
+          <!-- Language -->
+          <label for="language">Язык интерфейса</label>
+          <select id="language" class="input">
+            <option value="ru">Русский</option>
+            <option value="en">English</option>
+          </select>
+
+          <div class="row">
+            <button type="submit" class="btn success">Сохранить</button>
+            <button type="button" class="btn ghost" id="reset-settings">Сбросить</button>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <div>© Elytopia</div>
+    </footer>
+  </div>
+
+  <script>
+    const form = document.getElementById("settings-form");
+    const themeEl = document.getElementById("theme");
+    const soundEl = document.getElementById("sound");
+    const notifEl = document.getElementById("notifications");
+    const langEl = document.getElementById("language");
+
+    // Load saved settings
+    const saved = JSON.parse(localStorage.getItem("ely_settings") || "{}");
+    if (saved.theme) themeEl.value = saved.theme;
+    if (saved.sound) soundEl.checked = saved.sound;
+    if (saved.notifications) notifEl.checked = saved.notifications;
+    if (saved.language) langEl.value = saved.language;
+
+    // Save settings
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+      const settings = {
+        theme: themeEl.value,
+        sound: soundEl.checked,
+        notifications: notifEl.checked,
+        language: langEl.value
+      };
+      localStorage.setItem("ely_settings", JSON.stringify(settings));
+      alert("Настройки сохранены!");
+    });
+
+    // Reset settings
+    document.getElementById("reset-settings").onclick = () => {
+      localStorage.removeItem("ely_settings");
+      themeEl.value = "dark";
+      soundEl.checked = false;
+      notifEl.checked = false;
+      langEl.value = "ru";
+      alert("Настройки сброшены!");
+    };
+  </script>
+</body>
+</html>
