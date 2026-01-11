@@ -5,6 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Elytopia — Upgrade</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Simple modal styling */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: #1a1b31;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 400px;
+      text-align: center;
+      color: #fff;
+    }
+    .modal-content h3 { margin-bottom: 10px; }
+    .modal-content button { margin: 8px; }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -24,20 +47,20 @@
 
     <main class="grid">
       <section class="card" style="grid-column: span 12;">
-        <h2>Premium</h2>
+        <h2>✨ Elytopia Premium</h2>
         <p class="muted">Получите дополнительные возможности и эксклюзивные награды с Elytopia Premium.</p>
       </section>
 
       <!-- Premium Tier -->
       <section class="card" style="grid-column: span 6;">
-        <h3>Premium 1</h3>
+        <h3>🌟 Premium</h3>
         <p class="muted">Цена: <strong>$4.99</strong></p>
         <ul>
           <li>Доступ к эксклюзивным блукам</li>
           <li>Бонусные монеты каждый день</li>
           <li>Особая метка Premium в профиле</li>
         </ul>
-        <button class="btn success">Купить Premium</button>
+        <button class="btn success" onclick="openCheckout('Premium', 4.99)">Купить Premium</button>
       </section>
 
       <!-- Premium 1 Tier -->
@@ -50,7 +73,7 @@
           <li>Эксклюзивные события и награды</li>
           <li>Особая метка Premium 1 в профиле</li>
         </ul>
-        <button class="btn success">Купить Premium 1</button>
+        <button class="btn success" onclick="openCheckout('Premium 1', 9.99)">Купить Premium 1</button>
       </section>
     </main>
 
@@ -58,5 +81,36 @@
       <div>© Elytopia — Upgrade</div>
     </footer>
   </div>
+
+  <!-- Checkout Modal -->
+  <div class="modal" id="checkoutModal">
+    <div class="modal-content">
+      <h3 id="checkoutTitle">Checkout</h3>
+      <p id="checkoutPrice"></p>
+      <button class="btn success" onclick="confirmPurchase()">Подтвердить покупку</button>
+      <button class="btn ghost" onclick="closeCheckout()">Отмена</button>
+    </div>
+  </div>
+
+  <script>
+    let selectedProduct = null;
+
+    function openCheckout(product, price) {
+      selectedProduct = product;
+      document.getElementById("checkoutTitle").textContent = "Покупка: " + product;
+      document.getElementById("checkoutPrice").textContent = "Цена: $" + price.toFixed(2);
+      document.getElementById("checkoutModal").style.display = "flex";
+    }
+
+    function closeCheckout() {
+      document.getElementById("checkoutModal").style.display = "none";
+      selectedProduct = null;
+    }
+
+    function confirmPurchase() {
+      alert("Поздравляем! Вы успешно приобрели " + selectedProduct + ".");
+      closeCheckout();
+    }
+  </script>
 </body>
 </html>
