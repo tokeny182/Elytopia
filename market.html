@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Elytopia — Магазин</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div aria-hidden="true" class="brand-logo"></div>
+        <h1>Elytopia</h1>
+      </div>
+      <nav>
+        <a href="index.html" class="btn ghost">Главная</a>
+        <a href="login.html" class="btn ghost">Вход</a>
+        <a href="signup.html" class="btn ghost">Регистрация</a>
+      </nav>
+    </header>
+
+    <main class="grid">
+      <section class="card" style="grid-column: span 12;">
+        <h2>Магазин паков</h2>
+        <p class="muted">Вы получаете <strong>25 монет</strong> каждые 2 секунды. Каждый пак стоит 25 монет.</p>
+        <div class="row" style="justify-content: space-between; align-items: center;">
+          <div><strong>Ваш баланс:</strong> <span id="currency">0</span> монет</div>
+          <button class="btn warning" id="reset">Сбросить баланс</button>
+        </div>
+      </section>
+
+      <section class="card" style="grid-column: span 12;">
+        <div class="mode-grid" id="packs"></div>
+      </section>
+
+      <section class="card" style="grid-column: span 12;">
+        <h2>Результат открытия</h2>
+        <div id="result" class="muted">Пока ничего не открыто.</div>
+      </section>
+    </main>
+
+    <footer>
+      <div>© Elytopia</div>
+    </footer>
+  </div>
+
+  <script>
+    // --- Currency ---
+    let coins = 0;
+    const currencyEl = document.getElementById("currency");
+    setInterval(() => {
+      coins += 25;
+      currencyEl.textContent = coins;
+    }, 2000);
+
+    document.getElementById("reset").onclick = () => {
+      coins = 0;
+      currencyEl.textContent = coins;
+    };
+
+    // --- Packs ---
+    const packsContainer = document.getElementById("packs");
+    const resultEl = document.getElementById("result");
+
+    const packs = Array.from({length: 13}, (_, i) => ({
+      id: i+1,
+      name: "Пак #" + (i+1)
+    }));
+
+    packs.forEach(pack => {
+      const div = document.createElement("div");
+      div.className = "mode";
+      div.innerHTML = `
+        <h3>${pack.name}</h3>
+        <p>Цена: 25 монет</p>
+        <button class="btn" data-pack="${pack.id}">Открыть</button>
+      `;
+      packsContainer.appendChild(div);
+    });
+
+    // --- Rarity system ---
+    const rarities = [
+      { name: "Uncommon", chance: 40, color: "#4caf50" },
+      { name: "Rare", chance: 25, color: "#2196f3" },
+      { name: "Epic", chance: 15, color: "#9c27b0" },
+      { name: "Legendary", chance: 10, color: "#ff9800" },
+      { name: "Chroma", chance: 5, color: "#e91e63" },
+      { name: "Supreme", chance: 3, color: "#00bcd4" },
+      { name: "Mythical", chance: 2, color: "#f44336" }
+    ];
+
+    function rollRarity() {
+      const roll = Math.random() * 100;
+      let cumulative = 0;
+      for (const r of rarities) {
+        cumulative += r.chance;
+        if (roll <= cumulative) return r;
+      }
+      return rarities[0]; // fallback
+    }
+
+    packsContainer.addEventListener("click", e => {
+      if (e.target.matches("[data-pack]")) {
+        if (coins < 25) {
+          resultEl.textContent = "Недостаточно монет!";
+          return;
+        }
+        coins -= 25;
+        currencyEl.textContent = coins;
+        const rarity = rollRarity();
+        resultEl.innerHTML = `Вы открыли пак и получили: 
+          <span style="color:${rarity.color}; font-weight:bold">${rarity.name}</span>`;
+      }
+    });
+  </script>
+</body>
+</html>
